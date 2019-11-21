@@ -1,0 +1,2 @@
+insert into public.operations (id,date,amount,currency,comment) values ('e66e6153-fbef-4252-8123-fe2baa5b8163', '2017-07-16T19:17:57.689Z', 200,'hrn','comment');
+insert into public.operations (id,date,amount,currency,comment) values ('e66e6153-fbef-4252-8123-fe2baa5b8162', '2017-07-16T19:17:57.689Z', 200, 'usd','comment 2');
