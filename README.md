@@ -1,2 +1,2 @@
-# taxless-api
-Taxless backend server - API
+# finplat-api
+Financial platform - API
