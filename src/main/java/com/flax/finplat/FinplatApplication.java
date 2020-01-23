@@ -1,4 +1,4 @@
-package com.kmets.taxless;
+package com.flax.finplat;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaRepositories
 @SpringBootApplication
-public class TaxlessApplication {
+public class FinplatApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TaxlessApplication.class, args);
+        SpringApplication.run(FinplatApplication.class, args);
     }
 
 }

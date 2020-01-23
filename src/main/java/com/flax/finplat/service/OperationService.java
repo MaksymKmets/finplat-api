@@ -1,6 +1,6 @@
-package com.kmets.taxless.service;
+package com.flax.finplat.service;
 
-import com.kmets.taxless.model.Operation;
+import com.flax.finplat.model.Operation;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;

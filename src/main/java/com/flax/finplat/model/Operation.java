@@ -1,4 +1,4 @@
-package com.kmets.taxless.model;
+package com.flax.finplat.model;
 
 import lombok.AccessLevel;
 import lombok.Getter;

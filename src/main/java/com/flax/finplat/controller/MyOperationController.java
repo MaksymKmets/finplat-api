@@ -1,8 +1,8 @@
-package com.kmets.taxless.controller;
+package com.flax.finplat.controller;
 
-import com.kmets.taxless.controller.dto.SaveOperationReq;
-import com.kmets.taxless.model.Operation;
-import com.kmets.taxless.service.OperationService;
+import com.flax.finplat.controller.dto.SaveOperationReq;
+import com.flax.finplat.model.Operation;
+import com.flax.finplat.service.OperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

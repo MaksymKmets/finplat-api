@@ -8,11 +8,13 @@
         <version>2.2.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.kmets</groupId>
-    <artifactId>taxless</artifactId>
+
+    <groupId>com.flax</groupId>
+    <artifactId>finplat</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>taxless</name>
-    <description>Demo project for Spring Boot</description>
+    <name>finplat</name>
+    <description>Financial platform</description>
+
 
     <properties>
         <java.version>11</java.version>
@@ -62,7 +64,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <finalName>taxless</finalName>
+                    <finalName>finplat</finalName>
                 </configuration>
             </plugin>
         </plugins>
