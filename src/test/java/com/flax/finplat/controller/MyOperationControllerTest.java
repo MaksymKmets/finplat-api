@@ -1,6 +1,7 @@
 package com.flax.finplat.controller;
 
 import com.flax.finplat.model.Operation;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
