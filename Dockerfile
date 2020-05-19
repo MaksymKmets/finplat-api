@@ -1,9 +1,10 @@
-FROM maven:3.6.3-jdk-11 as builder
+FROM gradle:6.4.1-jdk11 as builder
 WORKDIR /app
 COPY . .
-RUN mvn package -DskipTests
+#don't execute tests because CI already executed them
+RUN gradle clean build -x test
 
 FROM openjdk:12-alpine
 WORKDIR /opt
-COPY --from=builder /app/target/finplat.jar ./
-CMD ["java", "-jar", "finplat.jar"]
+COPY --from=builder /app/core/build/libs ./
+CMD ["/bin/sh","-c","java -jar finplat-api-*.jar"]

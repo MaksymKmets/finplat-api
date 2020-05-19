@@ -6,12 +6,12 @@ import com.flax.finplat.model.Operation;
 import com.flax.finplat.repository.OperationRepository;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -23,14 +23,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-        classes = {FinplatApplication.class, WebConfig.class}
-)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = {FinplatApplication.class, WebConfig.class})
 @AutoConfigureMockMvc
-@TestPropertySource(
-        locations = "classpath:test-application.properties")
-class MyOperationControllerTest {
+@TestPropertySource(locations = "classpath:test-application.properties")
+public class MyOperationControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -38,12 +35,11 @@ class MyOperationControllerTest {
     @Autowired
     private OperationRepository operationRepository;
 
-    private static final String OPERATIONS
-            = "/my/finances/operations";
+    private static final String OPERATIONS = "/my/finances/operations";
 
     @SneakyThrows
     @Test
-    void viewMyOperations() {
+    public void viewMyOperations() {
         mvc.perform(get(OPERATIONS)
                             .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -57,12 +53,11 @@ class MyOperationControllerTest {
                 .andExpect(jsonPath("$[1].amount", is(equalTo(200.0))))
                 .andExpect(jsonPath("$[1].comment", is(equalTo("comment 2"))))
                 .andExpect(jsonPath("$[1].currency", is(equalTo("usd"))));
-
     }
 
     @SneakyThrows
     @Test
-    void createOperation() {
+    public void createOperation() {
         mvc.perform(post(OPERATIONS)
                             .contentType(APPLICATION_JSON)
                             .content("{\n" +
@@ -82,7 +77,7 @@ class MyOperationControllerTest {
 
     @SneakyThrows
     @Test
-    void deleteOperation() {
+    public void deleteOperation() {
         Operation newFirstOperation = operationRepository.save(Operation.createEmpty(OffsetDateTime.now(),
                                                                                      "hrn",
                                                                                      BigDecimal.valueOf(200),
@@ -112,7 +107,7 @@ class MyOperationControllerTest {
 
     @SneakyThrows
     @Test
-    void updateOperation() {
+    public void updateOperation() {
         Operation newFirstOperation = operationRepository.save(Operation.createEmpty(OffsetDateTime.now(),
                                                                                      "hrn",
                                                                                      BigDecimal.valueOf(200),
@@ -127,12 +122,12 @@ class MyOperationControllerTest {
         mvc.perform(put(OPERATIONS + "/" + newFirstOperation.getId())
                             .accept(APPLICATION_JSON)
                             .contentType(APPLICATION_JSON)
-        .content("{\n" +
-                         "\t\"date\": \"2019-07-16T19:17:57.689Z\",\n" +
-                         "\t\"currency\": \"eur\",\n" +
-                         "\t\"amount\": 400,\n" +
-                         "\t\"comment\": \"update operation\"\n" +
-                         "}"))
+                            .content("{\n" +
+                                             "\t\"date\": \"2019-07-16T19:17:57.689Z\",\n" +
+                                             "\t\"currency\": \"eur\",\n" +
+                                             "\t\"amount\": 400,\n" +
+                                             "\t\"comment\": \"update operation\"\n" +
+                                             "}"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(equalTo(newFirstOperation.getId()))))

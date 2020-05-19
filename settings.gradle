@@ -1,0 +1,2 @@
+rootProject.name = 'finplat-api'
+include 'core'
