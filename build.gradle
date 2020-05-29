@@ -23,6 +23,7 @@ subprojects {
 
 description = 'Financial platform API'
 
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }

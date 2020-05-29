@@ -5,6 +5,10 @@ plugins {
 description = 'Financial platform core'
 archivesBaseName = 'finplat-api'
 
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
     compile "io.springfox:springfox-swagger2:${springFoxSwagger2Version}"
     compile "io.springfox:springfox-swagger-ui:${springFoxSwagger2Version}"

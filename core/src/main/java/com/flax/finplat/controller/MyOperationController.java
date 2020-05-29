@@ -1,6 +1,6 @@
 package com.flax.finplat.controller;
 
-import com.flax.finplat.controller.dto.SaveOperationReq;
+import com.flax.finplat.dto.SaveOperationReq;
 import com.flax.finplat.model.Operation;
 import com.flax.finplat.service.OperationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,8 @@ public class MyOperationController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Operation createOperation(@RequestBody SaveOperationReq req) {
-        return operationService.createOperation(req.getDate(), req.getCurrency(), req.getAmount(), req.getComment());
+        return operationService.createOperation(req.getDate(), req.getCurrency(),
+                                                req.getAmount(), req.getComment());
     }
 
     @DeleteMapping("/{operationId}")
@@ -39,7 +40,8 @@ public class MyOperationController {
     @PutMapping("/{operationId}")
     public Operation updateOperation(@PathVariable("operationId") String operationId,
                                      @RequestBody SaveOperationReq req) {
-        return operationService.updateOperation(operationId, req.getDate(), req.getCurrency(), req.getAmount(),
+        return operationService.updateOperation(operationId, req.getDate(),
+                                                req.getCurrency(), req.getAmount(),
                                                 req.getComment());
     }
 }

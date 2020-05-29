@@ -1,7 +1,7 @@
 package com.flax.finplat.service;
 
 import com.flax.finplat.repository.OperationRepository;
-import com.flax.finplat.service.exception.OperationNotFoundException;
+import com.flax.finplat.exception.OperationNotFoundException;
 import com.flax.finplat.model.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
