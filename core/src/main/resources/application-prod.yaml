@@ -1,0 +1,13 @@
+server:
+  servlet:
+    context-path: /api
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+  datasource:
+    initialization-mode: always
+    url: jdbc:postgresql://${POSTGRES_HOST:postgresql}:${POSTGRES_PORT:5432}/${POSTGRES_DB:finplat}
+    username: ${POSTGRES_USER:root}
+    password: ${POSTGRES_PASSWORD:root_password}
+    driver-class-name: ${POSTGRES_DRIVER:org.postgresql.Driver}

@@ -1,33 +1,28 @@
 package com.flax.finplat.controller;
 
-import com.flax.finplat.FinplatApplication;
-import com.flax.finplat.config.WebConfig;
 import com.flax.finplat.model.Operation;
 import com.flax.finplat.repository.OperationRepository;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+import static com.flax.finplat.controller.ActiveTestProfiles.TEST;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:application-test.properties")
+@ActiveProfiles(TEST)
 public class MyOperationControllerTest {
 
     @Autowired
@@ -113,7 +108,6 @@ public class MyOperationControllerTest {
                                                                                      "hrn",
                                                                                      BigDecimal.valueOf(200),
                                                                                      "comment"));
-
         mvc.perform(get(OPERATIONS)
                             .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())

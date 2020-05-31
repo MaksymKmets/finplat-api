@@ -1,15 +1,7 @@
 server:
   servlet:
     context-path: /api
-  port: ${SPRING_APP_SERVER_PORT:7070}
 spring:
   jpa:
     hibernate:
       ddl-auto: create
-    database-platform: ${SPRING_APP_JPA_DATABASE_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
-  datasource:
-    initialization-mode: always
-    url: jdbc:postgresql://${POSTGRES_HOST:postgresql}:${POSTGRES_PORT:5432}/${POSTGRES_DB:finplat}
-    username: ${POSTGRES_USER:root}
-    password: ${POSTGRES_PASSWORD:root_password}
-    driver-class-name: ${POSTGRES_DRIVER:org.postgresql.Driver}
