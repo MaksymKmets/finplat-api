@@ -2,23 +2,30 @@ package com.flax.finplat.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * General REST exception
  */
-@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public class FinplatException extends RuntimeException {
-    @Getter
-    protected final DigiPlugExceptionType code;
+@Getter
+public class FinplatException extends RuntimeException implements SystemException {
 
-    public FinplatException(String message, DigiPlugExceptionType code) {
-        super(message);
-        this.code = code;
+    protected final HttpStatus status;
+
+    public String getCode() {
+        return getClass().getSimpleName()
+                .replaceAll("Exception", "")
+                .replaceAll("([A-Z]+)([A-Z])([a-z])", "$1_$2$3")
+                .replaceAll("([a-z0-9])([A-Z])", "$1_$2")
+                .toUpperCase();
     }
 
-    public FinplatException(String message) {
+    protected FinplatException(HttpStatus status, String message) {
         super(message);
-        this.code = DigiPlugExceptionType.INTERNAL_SERVER_ERROR;
+        this.status = status;
+    }
+
+    protected FinplatException( HttpStatus status, String message, Throwable cause) {
+        super(message, cause);
+        this.status = status;
     }
 }

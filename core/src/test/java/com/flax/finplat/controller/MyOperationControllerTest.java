@@ -1,14 +1,16 @@
 package com.flax.finplat.controller;
 
+import com.flax.finplat.common.IdGenerator;
+import com.flax.finplat.controller.client.OperationClient;
 import com.flax.finplat.model.Operation;
 import com.flax.finplat.repository.OperationRepository;
+import com.jayway.jsonpath.JsonPath;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -16,7 +18,6 @@ import java.time.OffsetDateTime;
 import static com.flax.finplat.controller.ActiveTestProfiles.TEST;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -26,27 +27,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MyOperationControllerTest {
 
     @Autowired
-    private MockMvc mvc;
+    private OperationClient client;
 
     @Autowired
     private OperationRepository operationRepository;
 
-    private static final String OPERATIONS = "/my/finances/operations";
+    @Autowired
+    private IdGenerator idGenerator;
+
 
     @SneakyThrows
     @Test
     public void viewMyOperations() {
-        mvc.perform(get(OPERATIONS)
-                            .accept(APPLICATION_JSON))
+        client.getOperations()
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", notNullValue()))
-                .andExpect(jsonPath("$[0].amount", is(equalTo(200.0))))
+                .andExpect(jsonPath("$[0].amount", is(equalTo("200.0000"))))
                 .andExpect(jsonPath("$[0].comment", is(equalTo("comment"))))
                 .andExpect(jsonPath("$[0].currency", is(equalTo("hrn"))))
                 .andExpect(jsonPath("$[1].id", notNullValue()))
-                .andExpect(jsonPath("$[1].amount", is(equalTo(200.0))))
+                .andExpect(jsonPath("$[1].amount", is(equalTo("200.0000"))))
                 .andExpect(jsonPath("$[1].comment", is(equalTo("comment 2"))))
                 .andExpect(jsonPath("$[1].currency", is(equalTo("usd"))));
     }
@@ -54,21 +56,17 @@ public class MyOperationControllerTest {
     @SneakyThrows
     @Test
     public void createOperation() {
-        mvc.perform(post(OPERATIONS)
-                            .contentType(APPLICATION_JSON)
-                            .content("{\n" +
-                                             "\t\"date\": \"2019-07-16T19:17:57.689Z\",\n" +
-                                             "\t\"currency\": \"hrn\",\n" +
-                                             "\t\"amount\": 200,\n" +
-                                             "\t\"comment\": \"new operation\"\n" +
-                                             "}")
-        )
+        client.createOperation(OffsetDateTime.now(), "hrn", "200", "new operation")
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.amount", is(equalTo(200))))
+                .andExpect(jsonPath("$.amount", is(equalTo("200.0000"))))
                 .andExpect(jsonPath("$.comment", is(equalTo("new operation"))))
-                .andExpect(jsonPath("$.currency", is(equalTo("hrn"))));
+                .andExpect(jsonPath("$.currency", is(equalTo("hrn"))))
+                .andDo(mvcResult -> {
+                    String id = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.id");
+                    client.deleteOperation(id);
+                });
     }
 
     @SneakyThrows
@@ -82,19 +80,13 @@ public class MyOperationControllerTest {
                                                                                       "usd",
                                                                                       BigDecimal.valueOf(200),
                                                                                       "comment 2"));
-        mvc.perform(get(OPERATIONS)
-                            .accept(APPLICATION_JSON))
+        client.getOperations()
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(4)));
-        mvc.perform(delete(OPERATIONS + "/" + newFirstOperation.getId())
-                            .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk());
-        mvc.perform(delete(OPERATIONS + "/" + newSecondOperation.getId())
-                            .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk());
-        mvc.perform(get(OPERATIONS)
-                            .accept(APPLICATION_JSON))
+        client.deleteOperation(newFirstOperation.getId()).andExpect(status().isOk());
+        client.deleteOperation(newSecondOperation.getId()).andExpect(status().isOk());
+        client.getOperations()
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)));
@@ -108,27 +100,45 @@ public class MyOperationControllerTest {
                                                                                      "hrn",
                                                                                      BigDecimal.valueOf(200),
                                                                                      "comment"));
-        mvc.perform(get(OPERATIONS)
-                            .accept(APPLICATION_JSON))
+        client.getOperations()
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(3)));
-
-        mvc.perform(put(OPERATIONS + "/" + newFirstOperation.getId())
-                            .accept(APPLICATION_JSON)
-                            .contentType(APPLICATION_JSON)
-                            .content("{\n" +
-                                             "\t\"date\": \"2019-07-16T19:17:57.689Z\",\n" +
-                                             "\t\"currency\": \"eur\",\n" +
-                                             "\t\"amount\": 400,\n" +
-                                             "\t\"comment\": \"update operation\"\n" +
-                                             "}"))
+        client.updateOperation(newFirstOperation.getId(),
+                               OffsetDateTime.now(),
+                               "eur",
+                               BigDecimal.valueOf(400),
+                               "update operation")
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(equalTo(newFirstOperation.getId()))))
-                .andExpect(jsonPath("$.amount", is(equalTo(400))))
+                .andExpect(jsonPath("$.amount", is(equalTo("400.0000"))))
                 .andExpect(jsonPath("$.comment", is(equalTo("update operation"))))
-                .andExpect(jsonPath("$.currency", is(equalTo("eur"))));
-        operationRepository.delete(newFirstOperation);
+                .andExpect(jsonPath("$.currency", is(equalTo("eur"))))
+                .andDo(mvcResult-> {
+                    String id = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.id");
+                    client.deleteOperation(id);
+                });
+    }
+
+
+    @SneakyThrows
+    @Test
+    public void updateOperation_operationNotFound() {
+        client.updateOperation(idGenerator.nextId(),
+                               OffsetDateTime.now(),
+                               "eur",
+                               BigDecimal.valueOf(400),
+                               "update operation")
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON));
+    }
+
+    @SneakyThrows
+    @Test
+    public void deleteOperation_operationNotFound() {
+        client.deleteOperation(idGenerator.nextId())
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON));
     }
 }

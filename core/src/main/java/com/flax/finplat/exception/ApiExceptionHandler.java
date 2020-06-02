@@ -13,7 +13,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ServerWebInputException;
@@ -37,6 +36,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String TYPE_MISMATCH_ERROR_CODE = "typeMismatch";
     private static final String WRONG_TYPE_MESSAGE = "Wrong type provided";
     public static final String INTERNAL_SERVER_ERROR_CHECK_LOGS_FOR_DETAILS = "Internal server error. Check logs for details";
+    public static final String INVALID_INPUT = "INVALID_INPUT";
 
     /**
      * General exception handling
@@ -45,10 +45,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
      * @return
      */
     @ExceptionHandler(FinplatException.class)
-    protected ResponseEntity<Object> handleDigiPlugException(FinplatException e) {
+    protected ResponseEntity<Object> handleFinplatException(FinplatException e) {
         logError(e);
-        HttpStatus httpStatus = e.getClass().getAnnotation(ResponseStatus.class).value();
-        return buildResponseEntity(httpStatus, e.getCode(), e.getMessage());
+        return buildResponseEntity(e.getStatus(), e.getCode(), e.getMessage());
     }
 
     /**
@@ -61,7 +60,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e) {
         logError(e);
         return buildResponseEntity(HttpStatus.BAD_REQUEST,
-                                   DigiPlugExceptionType.INVALID_INPUT,
+                                   INVALID_INPUT,
                                    e.getConstraintViolations().stream()
                                            .map(ConstraintViolation::getMessage)
                                            .collect(Collectors.joining("\n")));
@@ -71,7 +70,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ServerWebInputException.class)
     protected ResponseEntity<Object> handleInvalidControllerInput(ServerWebInputException e) {
         logError(e);
-        return buildResponseEntity(HttpStatus.BAD_REQUEST, DigiPlugExceptionType.INVALID_INPUT, e.getMessage());
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, INVALID_INPUT, e.getMessage());
     }
 
     @ExceptionHandler(WebExchangeBindException.class)
@@ -98,7 +97,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleUnknownException(Exception e) {
         logError(e);
         return buildResponseEntity(HttpStatus.BAD_REQUEST,
-                                   DigiPlugExceptionType.INTERNAL_SERVER_ERROR,
+                                   INVALID_INPUT,
                                    INTERNAL_SERVER_ERROR_CHECK_LOGS_FOR_DETAILS);
     }
 
@@ -108,7 +107,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                                         getErrorTargetName(e),
                                         getErrorMessage(e)))
                 .collect(Collectors.joining("; "));
-        return buildResponseEntity(HttpStatus.BAD_REQUEST, DigiPlugExceptionType.INVALID_INPUT, message);
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, INVALID_INPUT, message);
     }
 
     private MultiValueMap<String, String> createHeaders() {
@@ -135,9 +134,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> buildResponseEntity(HttpStatus status,
-                                                       DigiPlugExceptionType code,
+                                                       String code,
                                                        String message) {
-        ErrorResponse.ApiError error = ErrorResponse.ApiError.valueOf(code.name(), message);
+        ErrorResponse.ApiError error = ErrorResponse.ApiError.valueOf(code, message);
         ErrorResponse exceptionResponse = ErrorResponse.valueOf(Collections.singletonList(error));
         return new ResponseEntity<>(exceptionResponse, createHeaders(), status);
     }

@@ -1,6 +1,5 @@
 package com.flax.finplat.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +26,7 @@ public class Operation {
 
     private OffsetDateTime date;
 
-    @Column(precision = 19, scale = 2)
+    @Column(precision = 19, scale = 4)
     private BigDecimal amount;
 
     private String currency;
