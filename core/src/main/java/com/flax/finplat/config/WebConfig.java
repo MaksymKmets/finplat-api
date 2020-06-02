@@ -60,7 +60,7 @@ public class WebConfig implements WebMvcConfigurer {
         public void serialize(OffsetDateTime offsetDateTime, JsonGenerator jsonGenerator,
                               SerializerProvider serializerProvider) throws IOException {
             jsonGenerator.writeString(
-                    DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(
+                    DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(
                             offsetDateTime));
         }
     }
