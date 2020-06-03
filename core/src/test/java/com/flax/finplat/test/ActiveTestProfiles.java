@@ -1,4 +1,4 @@
-package com.flax.finplat.controller;
+package com.flax.finplat.test;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

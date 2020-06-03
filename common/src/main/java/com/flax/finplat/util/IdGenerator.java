@@ -1,4 +1,4 @@
-package com.flax.finplat.common;
+package com.flax.finplat.util;
 
 import org.springframework.stereotype.Component;
 

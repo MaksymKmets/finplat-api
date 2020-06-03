@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Pavlo Sidelov
  */
 
-package com.flax.finplat.common;
+package com.flax.finplat.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

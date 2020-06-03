@@ -1,4 +1,4 @@
-package com.flax.finplat.dto;
+package com.flax.finplat.exception;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

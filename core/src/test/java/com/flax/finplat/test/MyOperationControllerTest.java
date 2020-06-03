@@ -1,9 +1,9 @@
-package com.flax.finplat.controller;
+package com.flax.finplat.test;
 
-import com.flax.finplat.common.IdGenerator;
-import com.flax.finplat.controller.client.OperationClient;
 import com.flax.finplat.model.Operation;
 import com.flax.finplat.repository.OperationRepository;
+import com.flax.finplat.test.client.OperationClient;
+import com.flax.finplat.util.IdGenerator;
 import com.jayway.jsonpath.JsonPath;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-import static com.flax.finplat.controller.ActiveTestProfiles.TEST;
+import static com.flax.finplat.test.ActiveTestProfiles.TEST;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

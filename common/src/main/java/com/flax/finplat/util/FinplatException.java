@@ -1,4 +1,4 @@
-package com.flax.finplat.exception;
+package com.flax.finplat.util;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
  * General REST exception
  */
 @Getter
-public class FinplatException extends RuntimeException implements SystemException {
+public class FinplatException extends RuntimeException {
 
     protected final HttpStatus status;
 

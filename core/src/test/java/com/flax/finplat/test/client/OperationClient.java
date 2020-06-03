@@ -1,6 +1,6 @@
-package com.flax.finplat.controller.client;
+package com.flax.finplat.test.client;
 
-import com.flax.finplat.common.Calculator;
+import com.flax.finplat.util.Calculator;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-import static com.flax.finplat.controller.client.JsonTemplates.OPERATION;
+import static com.flax.finplat.test.client.JsonTemplates.OPERATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 

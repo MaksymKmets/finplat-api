@@ -1,7 +1,7 @@
 package com.flax.finplat;
 
-import com.flax.finplat.common.Calculator;
 import com.flax.finplat.service.OperationService;
+import com.flax.finplat.util.Calculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,7 +14,7 @@ import java.time.OffsetDateTime;
 
 @EnableJpaRepositories("com.flax.finplat.repository")
 @EntityScan("com.flax.finplat.model")
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.flax.finplat")
 public class FinplatApplication implements ApplicationRunner {
 
     public static void main(String[] args) {
@@ -26,7 +26,7 @@ public class FinplatApplication implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        operationService.createOperation(OffsetDateTime.now(), "hrn", Calculator.normalize(200),"comment");
+        operationService.createOperation(OffsetDateTime.now(), "hrn", Calculator.normalize(200), "comment");
         operationService.createOperation(OffsetDateTime.now(), "usd", Calculator.normalize(200),"comment 2");
     }
 }

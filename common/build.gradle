@@ -1,0 +1,18 @@
+description = 'Module with common things'
+archivesBaseName = 'common'
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    api "io.springfox:springfox-swagger2:${springFoxSwagger2Version}"
+    api "io.springfox:springfox-swagger-ui:${springFoxSwagger2Version}"
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    api 'ch.qos.logback:logback-classic'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}

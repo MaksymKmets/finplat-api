@@ -1,6 +1,6 @@
 package com.flax.finplat.exception;
 
-import com.flax.finplat.dto.ErrorResponse;
+import com.flax.finplat.util.FinplatException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

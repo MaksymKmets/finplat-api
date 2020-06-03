@@ -1,4 +1,4 @@
-package com.flax.finplat.controller.client;
+package com.flax.finplat.test.client;
 
 public class JsonTemplates {
     public static final String OPERATION = "{\n" +

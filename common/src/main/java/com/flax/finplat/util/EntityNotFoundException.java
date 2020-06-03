@@ -1,4 +1,4 @@
-package com.flax.finplat.exception;
+package com.flax.finplat.util;
 
 import org.springframework.http.HttpStatus;
 
