@@ -12,6 +12,7 @@ import org.springframework.http.converter.json.AbstractJackson2HttpMessageConver
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
@@ -24,10 +25,32 @@ import java.util.Optional;
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
+    /**
+     * Customize cors strategy
+     *
+     * @param registry registry
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000");
+    }
+
+    /**
+     * Customize swagger resources.
+     * NOTE! Swagger will not work without this resource handlers!
+     * If you don't have {@link WebMvcConfigurer} in your boot app (use boot default),
+     * default {@link WebMvcConfigurer} will have this resource handlers registred
+     *
+     * @param registry registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     /**

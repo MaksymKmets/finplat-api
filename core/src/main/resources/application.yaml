@@ -1,6 +1,9 @@
 server:
   servlet:
     context-path: /api
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
 spring:
   jpa:
     hibernate:
@@ -9,3 +12,8 @@ spring:
     serialization:
       write_dates_as_timestamps: false
     date-format: yyyy-MM-dd'T'HH:mm
+logging:
+  level:
+    com.flax.finplat: DEBUG
+    org.springframework:
+      web: DEBUG
