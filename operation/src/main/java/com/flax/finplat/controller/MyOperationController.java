@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -35,7 +36,7 @@ public class MyOperationController {
             produces = APPLICATION_JSON_VALUE)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Operation createOperation(@RequestBody SaveOperationReq req) {
+    public Operation createOperation(@RequestBody @Valid SaveOperationReq req) {
         return operationService.createOperation(req.getDate(), req.getCurrency(),
                                                 req.getAmount(), req.getComment());
     }
@@ -49,7 +50,7 @@ public class MyOperationController {
     @ApiOperation(value = "Update an operation")
     @PutMapping("/{operationId}")
     public Operation updateOperation(@PathVariable("operationId") String operationId,
-                                     @RequestBody SaveOperationReq req) {
+                                     @RequestBody @Valid SaveOperationReq req) {
         return operationService.updateOperation(operationId, req.getDate(),
                                                 req.getCurrency(), req.getAmount(),
                                                 req.getComment());
