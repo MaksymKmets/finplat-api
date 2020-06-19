@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -37,6 +38,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String WRONG_TYPE_MESSAGE = "Wrong type provided";
     public static final String INTERNAL_SERVER_ERROR_CHECK_LOGS_FOR_DETAILS = "Internal server error. Check logs for details";
     public static final String INVALID_INPUT = "INVALID_INPUT";
+    public static final String FORBIDDEN_REQUEST = "FORBIDDEN_REQUEST";
 
     /**
      * General exception handling
@@ -85,6 +87,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   WebRequest request) {
         logError(exception);
         return bindingErrorResult(exception.getBindingResult());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    protected ResponseEntity<Object> handleForbiddenRequest(AccessDeniedException exception) {
+        logError(exception);
+        return buildResponseEntity(HttpStatus.FORBIDDEN, FORBIDDEN_REQUEST, exception.getMessage());
+
     }
 
     /**

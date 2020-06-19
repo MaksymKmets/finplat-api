@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class MyOperationController {
 
     @ApiOperation(value = "Get list of operations",
             produces = APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('VIEW_OPERATIONS')")
     @GetMapping
     public List<Operation> viewMyOperations() {
         return operationService.getOperations();
@@ -34,6 +36,7 @@ public class MyOperationController {
     @ApiOperation(value = "Create a new operation",
             consumes = APPLICATION_JSON_VALUE,
             produces = APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('CREATE_OPERATION')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Operation createOperation(@RequestBody @Valid SaveOperationReq req) {
@@ -42,12 +45,14 @@ public class MyOperationController {
     }
 
     @ApiOperation(value = "Delete an operation")
+    @PreAuthorize("hasAuthority('DELETE_OPERATION')")
     @DeleteMapping("/{operationId}")
     public void deleteOperation(@PathVariable("operationId") String operationId) {
         operationService.deleteOperation(operationId);
     }
 
     @ApiOperation(value = "Update an operation")
+    @PreAuthorize("hasAuthority('UPDATE_OPERATION')")
     @PutMapping("/{operationId}")
     public Operation updateOperation(@PathVariable("operationId") String operationId,
                                      @RequestBody @Valid SaveOperationReq req) {

@@ -16,4 +16,5 @@ logging:
   level:
     com.flax.finplat: DEBUG
     org.springframework:
+      security: DEBUG
       web: DEBUG
